@@ -119,7 +119,7 @@ require 'nvim-treesitter.configs'.setup {
 
     -- Automatically install missing parsers when entering buffer
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = true,
+    auto_install = false,
 
     -- List of parsers to ignore installing (or "all")
     -- ignore_install = { "javascript" },
@@ -144,8 +144,8 @@ require 'nvim-treesitter.configs'.setup {
         enable = true
     }
 }
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+-- vim.wo.foldmethod = 'expr'
+-- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 
 
 
