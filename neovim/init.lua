@@ -24,21 +24,14 @@ require("lazy").setup({
         { 'hrsh7th/cmp-path' },
         { 'hrsh7th/cmp-cmdline' },
         { 'hrsh7th/nvim-cmp' },
+        { "nvim-tree/nvim-web-devicons" },
+        { 'nvim-lua/plenary.nvim' },
         { "catppuccin/nvim",                 name = "catppuccin", priority = 1000 },
         { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", },
-        {
-            "nvim-tree/nvim-tree.lua",
-            version = "*",
-            lazy = false,
-            dependencies = {
-                "nvim-tree/nvim-web-devicons",
-            },
-            config = function()
-                require("nvim-tree").setup {}
-            end,
-        },
-        { 'nvim-telescope/telescope.nvim', tag = '0.1.8',      dependencies = { 'nvim-lua/plenary.nvim' } },
-        { "folke/which-key.nvim",          event = "VeryLazy", }
+        { 'nvim-telescope/telescope.nvim',   tag = '0.1.8', },
+        { "folke/which-key.nvim",            event = "VeryLazy", },
+        { "lewis6991/gitsigns.nvim" },
+        { "nvim-tree/nvim-tree.lua" },
     },
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "habamax" } },
