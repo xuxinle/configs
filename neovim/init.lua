@@ -15,27 +15,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Make sure to setup `mapleader` and `maplocalleader` before
--- loading lazy.nvim so that mappings are correct.
--- This is also a good place to setup other settings (vim.opt)
--- vim.g.mapleader = " "
--- vim.g.maplocalleader = "\\"
-
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
-        -- add your plugins here
-        {
-            "nvim-treesitter/nvim-treesitter",
-            build = ":TSUpdate",
-        },
         { 'neovim/nvim-lspconfig' },
         { 'hrsh7th/cmp-nvim-lsp' },
         { 'hrsh7th/cmp-buffer' },
         { 'hrsh7th/cmp-path' },
         { 'hrsh7th/cmp-cmdline' },
         { 'hrsh7th/nvim-cmp' },
-        { "catppuccin/nvim",      name = "catppuccin", priority = 1000 },
+        { "catppuccin/nvim",                 name = "catppuccin", priority = 1000 },
+        { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", },
         {
             "nvim-tree/nvim-tree.lua",
             version = "*",
@@ -47,28 +37,14 @@ require("lazy").setup({
                 require("nvim-tree").setup {}
             end,
         },
-        {
-            'nvim-telescope/telescope.nvim',
-            tag = '0.1.8',
-            dependencies = { 'nvim-lua/plenary.nvim' }
-        },
-        {
-            "folke/which-key.nvim",
-            event = "VeryLazy",
-            opts = {
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                -- refer to the configuration section below
-            },
-        }
+        { 'nvim-telescope/telescope.nvim', tag = '0.1.8',      dependencies = { 'nvim-lua/plenary.nvim' } },
+        { "folke/which-key.nvim",          event = "VeryLazy", }
     },
-    -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "habamax" } },
     -- automatically check for plugin updates
     checker = { enabled = true },
 })
--- require("config.lazy")
 
 
 
@@ -133,13 +109,7 @@ require 'nvim-treesitter.configs'.setup {
 
     -- Automatically install missing parsers when entering buffer
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
-
-    -- List of parsers to ignore installing (or "all")
-    -- ignore_install = { "javascript" },
-
-    ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-    -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+    auto_install = true,
 
     highlight = {
         enable = true,
@@ -178,11 +148,11 @@ vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'NvimTreeToggle
 
 
 
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+local telescope = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', telescope.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', telescope.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', telescope.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', telescope.help_tags, { desc = 'Telescope help tags' })
 
 
 
@@ -255,17 +225,7 @@ cmp.setup({
     snippet = {
         -- REQUIRED - you must specify a snippet engine
         expand = function(args)
-            -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
             vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
-
-            -- For `mini.snippets` users:
-            -- local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-            -- insert({ body = args.body }) -- Insert at cursor
-            -- cmp.resubscribe({ "TextChangedI", "TextChangedP" })
-            -- require("cmp.config").set_onetime({ sources = {} })
         end,
     },
     window = {
@@ -299,11 +259,6 @@ cmp.setup({
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        -- { name = 'vsnip' }, -- For vsnip users.
-        -- { name = 'luasnip' }, -- For luasnip users.
-        -- { name = 'ultisnips' }, -- For ultisnips users.
-
-        -- { name = 'snippy' }, -- For snippy users.
     }, {
         { name = 'buffer' },
     })
@@ -342,7 +297,6 @@ cmp.setup.cmdline(':', {
 
 vim.lsp.enable('clangd')
 vim.lsp.enable('pyright')
--- ruff格式化python
 vim.lsp.enable('ruff')
 vim.lsp.enable('bashls')
 vim.lsp.enable('gopls')
