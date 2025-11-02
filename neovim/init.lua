@@ -77,7 +77,7 @@ vim.opt.expandtab = true   -- 将 <Tab> 键输入转换为空格（推荐）
 
 
 vim.keymap.set({ 'n', 'x' }, '<leader>?', function()
-    require('which-key').show({ global = true })
+    require('which-key').show({ global = false })
 end, { desc = 'which-key' })
 
 
