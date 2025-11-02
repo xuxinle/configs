@@ -72,6 +72,18 @@ require("lazy").setup({
 
 
 
+-- clipboard
+vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+}
 
 
 
@@ -85,6 +97,8 @@ vim.opt.tabstop = 4        -- 一个 <Tab> 字符显示为 4 列
 vim.opt.softtabstop = 4    -- 按 Tab 或 Backspace 时，缩进/删除 4 个空格
 vim.opt.shiftwidth = 4     -- 自动缩进（如 >>、<<）时使用 4 个空格
 vim.opt.expandtab = true   -- 将 <Tab> 键输入转换为空格（推荐）
+
+
 
 vim.keymap.set({ 'n', 'x' }, '<leader>?', function()
     require('which-key').show({ global = true })
