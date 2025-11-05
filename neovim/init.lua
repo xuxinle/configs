@@ -32,9 +32,10 @@ require("lazy").setup({
         { 'nvim-telescope/telescope.nvim',   tag = '0.1.8', },
         { "folke/which-key.nvim",            event = "VeryLazy", },
         { "lewis6991/gitsigns.nvim" },
-        { "nvim-tree/nvim-tree.lua" },
-        { "akinsho/bufferline.nvim" },
-        { "kylechui/nvim-surround" },
+        { "nvim-tree/nvim-tree.lua",         config = true },
+        { "akinsho/bufferline.nvim",         config = true },
+        { "kylechui/nvim-surround",          config = true },
+        { "windwp/nvim-autopairs",           event = "InsertEnter", config = true },
     },
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "habamax" } },
@@ -81,8 +82,6 @@ vim.keymap.set({ 'n', 'x' }, '<leader>?', function()
     require('which-key').show({ global = false })
 end, { desc = 'which-key' })
 
-require("bufferline").setup {}
-require("nvim-surround").setup({})
 
 
 
@@ -139,15 +138,12 @@ require 'nvim-treesitter.configs'.setup {
 
 
 
-
+-- NvimTree
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
-
--- empty setup using defaults
-require("nvim-tree").setup()
 vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'NvimTreeToggle' })
+vim.keymap.set('n', '<leader>E', ':NvimTreeRefresh<CR>', { desc = 'NvimTreeRefresh' })
 
 
 
@@ -173,7 +169,7 @@ end, { desc = "Clear Highlight" })
 
 
 -- 在当前窗口 下方 打开水平终端（推荐）
-vim.keymap.set('n', '<leader>tt', ':bel 15split | terminal<CR>i', {
+vim.keymap.set('n', '<leader>tt', ':bel 20split | terminal<CR>i', {
     silent = true,
     desc = "Terminal: horizontal split (below)"
 })
@@ -185,7 +181,7 @@ vim.keymap.set('n', '<leader>tv', ':bel 80vsplit | terminal<CR>i', {
 })
 
 -- 在整个布局 最底部 打开终端（最常用）
-vim.keymap.set('n', '<leader>th', ':botright bel 15split | terminal<CR>i', {
+vim.keymap.set('n', '<leader>th', ':botright bel 20split | terminal<CR>i', {
     silent = true,
     desc = "Terminal: at bottom"
 })
@@ -203,6 +199,7 @@ vim.keymap.set('n', '<leader>c', ':close<CR>', { desc = "Close window" })
 vim.diagnostic.config({
     virtual_text = false,
     underline = false,
+    severity_sort = true,
 })
 vim.keymap.set('n', '<leader>df', function()
     vim.diagnostic.open_float()
