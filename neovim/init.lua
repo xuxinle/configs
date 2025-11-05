@@ -26,18 +26,37 @@ require("lazy").setup({
         { 'hrsh7th/nvim-cmp' },
         { "nvim-tree/nvim-web-devicons" },
         { 'nvim-lua/plenary.nvim' },
-        { "catppuccin/nvim",                 name = "catppuccin", priority = 1000 },
+        { "catppuccin/nvim",                 name = "catppuccin", },
+        { "folke/tokyonight.nvim" },
         { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", },
         { 'nvim-telescope/telescope.nvim',   tag = '0.1.8', },
         { "folke/which-key.nvim",            event = "VeryLazy", },
         { "lewis6991/gitsigns.nvim" },
         { "nvim-tree/nvim-tree.lua" },
+        { "akinsho/bufferline.nvim" },
+        { "kylechui/nvim-surround" },
     },
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "habamax" } },
     -- automatically check for plugin updates
-    checker = { enabled = true },
+    -- checker = { enabled = true },
 })
+
+
+
+vim.cmd('set nu')
+-- vim.cmd('colorscheme habamax')
+require("catppuccin").setup({ term_colors = true, auto_integrations = true, })
+vim.cmd('colorscheme catppuccin')
+-- vim.cmd('colorscheme tokyonight')
+vim.opt.termguicolors = true
+vim.opt.redrawtime = 10000 -- 10秒
+
+vim.opt.tabstop = 4        -- 一个 <Tab> 字符显示为 4 列
+vim.opt.softtabstop = 4    -- 按 Tab 或 Backspace 时，缩进/删除 4 个空格
+vim.opt.shiftwidth = 4     -- 自动缩进（如 >>、<<）时使用 4 个空格
+vim.opt.expandtab = true   -- 将 <Tab> 键输入转换为空格（推荐）
+
 
 
 
@@ -54,32 +73,25 @@ vim.g.clipboard = {
     },
 }
 
-
-
-
-vim.cmd('set nu')
-vim.cmd('colorscheme catppuccin')
-vim.opt.termguicolors = true
-vim.opt.redrawtime = 10000 -- 10秒
-
-vim.opt.tabstop = 4        -- 一个 <Tab> 字符显示为 4 列
-vim.opt.softtabstop = 4    -- 按 Tab 或 Backspace 时，缩进/删除 4 个空格
-vim.opt.shiftwidth = 4     -- 自动缩进（如 >>、<<）时使用 4 个空格
-vim.opt.expandtab = true   -- 将 <Tab> 键输入转换为空格（推荐）
-
+vim.keymap.set('n', '<F11>', ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>", {})
+vim.keymap.set('n', '<Space>w', ':w<CR>', {})
 
 
 vim.keymap.set({ 'n', 'x' }, '<leader>?', function()
     require('which-key').show({ global = false })
 end, { desc = 'which-key' })
 
+require("bufferline").setup {}
+require("nvim-surround").setup({})
+
+
 
 -- 代码开发相关快捷键
 vim.keymap.set('n', '<Space>d', vim.lsp.buf.definition, { desc = 'Goto definition' })
 vim.keymap.set('n', '<Space>D', vim.lsp.buf.declaration, { desc = 'Goto declaration' })
-vim.keymap.set('n', '<Space>r', vim.lsp.buf.rename, { desc = 'Rename' })
 vim.keymap.set('n', '<Space>i', vim.lsp.buf.implementation, { desc = 'Goto implementation' })
-vim.keymap.set('n', '<Space>R', vim.lsp.buf.references, { desc = 'References' })
+vim.keymap.set('n', '<Space>r', vim.lsp.buf.references, { desc = 'References' })
+vim.keymap.set('n', '<Space>n', vim.lsp.buf.rename, { desc = 'Rename' })
 vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code action' })
 
 
@@ -102,7 +114,7 @@ require 'nvim-treesitter.configs'.setup {
 
     -- Automatically install missing parsers when entering buffer
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = true,
+    auto_install = false,
 
     highlight = {
         enable = true,
@@ -132,8 +144,6 @@ require 'nvim-treesitter.configs'.setup {
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- optionally enable 24-bit colour
-vim.opt.termguicolors = true
 
 -- empty setup using defaults
 require("nvim-tree").setup()
@@ -163,7 +173,7 @@ end, { desc = "Clear Highlight" })
 
 
 -- 在当前窗口 下方 打开水平终端（推荐）
-vim.keymap.set('n', '<leader>th', ':bel 15split | terminal<CR>i', {
+vim.keymap.set('n', '<leader>tt', ':bel 15split | terminal<CR>i', {
     silent = true,
     desc = "Terminal: horizontal split (below)"
 })
@@ -175,27 +185,43 @@ vim.keymap.set('n', '<leader>tv', ':bel 80vsplit | terminal<CR>i', {
 })
 
 -- 在整个布局 最底部 打开终端（最常用）
-vim.keymap.set('n', '<leader>tt', ':botright bel 15split | terminal<CR>i', {
+vim.keymap.set('n', '<leader>th', ':botright bel 15split | terminal<CR>i', {
     silent = true,
     desc = "Terminal: at bottom"
 })
 
 -- 在终端模式下，按 <leader>q 直接关闭
-vim.keymap.set('t', '<leader>q', '<C-\\><C-n>:close<CR>', { silent = true, desc = "Close terminal" })
+vim.keymap.set('t', '<leader>q', '<C-\\><C-n>:bd!<CR>', { silent = true, desc = "Close terminal" })
 
 -- 或者在普通模式下关闭（如果你已退出终端模式）
-vim.keymap.set('n', '<leader>q', ':close<CR>', { desc = "Close window" })
+vim.keymap.set('n', '<leader>q', ':bd!<CR>', { desc = "Close window" })
+vim.keymap.set('n', '<leader>c', ':close<CR>', { desc = "Close window" })
 
 
 
 
 vim.diagnostic.config({
-    virtual_text = true,      -- 在代码行下方显示浮动提示（默认）
-    signs = true,             -- 在左侧栏显示图标（需配置 signs）
-    underline = true,         -- 下划线标出错误位置
-    update_in_insert = false, -- 插入模式下不更新（提升性能）
-    severity_sort = true,     -- 按严重性排序
+    virtual_text = false,
+    underline = false,
 })
+vim.keymap.set('n', '<leader>df', function()
+    vim.diagnostic.open_float()
+end, { desc = "弹窗显示诊断" })
+vim.keymap.set('n', '<leader>dv', function()
+    if vim.diagnostic.config().virtual_text then
+        vim.diagnostic.config({
+            virtual_text = false,
+            underline = false,
+        })
+    else
+        vim.diagnostic.config({
+            virtual_text = true,
+            underline = true,
+        })
+    end
+end, { desc = "行内显示诊断" })
+
+
 
 vim.keymap.set("n", "<Space>f", function()
     local clients = vim.lsp.get_clients({ bufnr = 0 })
