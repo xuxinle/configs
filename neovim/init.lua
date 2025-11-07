@@ -45,7 +45,17 @@ require("lazy").setup({
 
 
 
-vim.cmd('set nu')
+vim.opt.number = true
+vim.opt.relativenumber = true
+
+vim.api.nvim_create_autocmd("InsertEnter", {
+  callback = function() vim.opt.relativenumber = false end
+})
+vim.api.nvim_create_autocmd("InsertLeave", {
+  callback = function() vim.opt.relativenumber = true end
+})
+
+
 -- vim.cmd('colorscheme habamax')
 require("catppuccin").setup({ term_colors = true, auto_integrations = true, })
 vim.cmd('colorscheme catppuccin')
