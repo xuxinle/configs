@@ -96,21 +96,21 @@ end, { desc = 'which-key' })
 
 
 -- 代码开发相关快捷键
-vim.keymap.set('n', '<Space>d', vim.lsp.buf.definition, { desc = 'Goto definition' })
-vim.keymap.set('n', '<Space>D', vim.lsp.buf.declaration, { desc = 'Goto declaration' })
-vim.keymap.set('n', '<Space>i', vim.lsp.buf.implementation, { desc = 'Goto implementation' })
-vim.keymap.set('n', '<Space>r', vim.lsp.buf.references, { desc = 'References' })
-vim.keymap.set('n', '<Space>n', vim.lsp.buf.rename, { desc = 'Rename' })
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Goto definition' })
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Goto declaration' })
+vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { desc = 'Goto implementation' })
+vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = 'References' })
+vim.keymap.set('n', '<Space>r', vim.lsp.buf.rename, { desc = 'Rename' })
 vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code action' })
 
 
 
-vim.keymap.set('n', '<Space>/', function()
+vim.keymap.set('n', '<Space>c', function()
     return require('vim._comment').operator() .. '_'
 end, { expr = true, desc = 'Toggle comment line' })
-vim.keymap.set({ 'n', 'x' }, '<Space>c', function()
-    return require('vim._comment').operator()
-end, { expr = true, desc = 'Toggle comment' })
+-- vim.keymap.set({ 'n', 'x' }, '<Space>c', function()
+--     return require('vim._comment').operator()
+-- end, { expr = true, desc = 'Toggle comment' })
 
 
 
