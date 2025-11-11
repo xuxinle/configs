@@ -46,15 +46,15 @@ require("lazy").setup({
 
 
 vim.opt.number = true
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
+-- vim.api.nvim_create_autocmd("InsertEnter", {
+--   callback = function() vim.opt.relativenumber = false end
+-- })
+-- vim.api.nvim_create_autocmd("InsertLeave", {
+--   callback = function() vim.opt.relativenumber = true end
+-- })
 
-vim.api.nvim_create_autocmd("InsertEnter", {
-  callback = function() vim.opt.relativenumber = false end
-})
-vim.api.nvim_create_autocmd("InsertLeave", {
-  callback = function() vim.opt.relativenumber = true end
-})
-
+vim.opt.shell = '/usr/bin/fish'
 
 -- vim.cmd('colorscheme habamax')
 require("catppuccin").setup({ term_colors = true, auto_integrations = true, })
@@ -99,7 +99,7 @@ end, { desc = 'which-key' })
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Goto definition' })
 vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Goto declaration' })
 vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { desc = 'Goto implementation' })
-vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = 'References' })
+vim.keymap.set('n', 'gR', vim.lsp.buf.references, { desc = 'References' })
 vim.keymap.set('n', '<Space>r', vim.lsp.buf.rename, { desc = 'Rename' })
 vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code action' })
 
@@ -327,4 +327,5 @@ vim.lsp.enable('pyright')
 vim.lsp.enable('ruff')
 vim.lsp.enable('bashls')
 vim.lsp.enable('gopls')
+vim.lsp.enable('rust_analyzer')
 vim.lsp.enable('lua_ls')
