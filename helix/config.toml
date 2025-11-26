@@ -13,4 +13,8 @@ end-of-line-diagnostics = "disable"
 enable = true
 trigger-length = 3
 
-[editor.cursor-sha
+[editor.cursor-shape]
+insert = "bar"
+
+[keys.normal.space]
+"=" = ":fmt"
