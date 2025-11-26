@@ -24,18 +24,19 @@ require("lazy").setup({
         { 'hrsh7th/cmp-path' },
         { 'hrsh7th/cmp-cmdline' },
         { 'hrsh7th/nvim-cmp' },
-        { "nvim-tree/nvim-web-devicons" },
+        { 'nvim-tree/nvim-web-devicons' },
         { 'nvim-lua/plenary.nvim' },
-        { "catppuccin/nvim",                 name = "catppuccin", },
-        { "folke/tokyonight.nvim" },
-        { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate", },
+        { 'catppuccin/nvim',                 name = 'catppuccin', },
+        { 'folke/tokyonight.nvim' },
+        { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', },
         { 'nvim-telescope/telescope.nvim',   tag = '0.1.8', },
-        { "folke/which-key.nvim",            event = "VeryLazy", },
-        { "lewis6991/gitsigns.nvim" },
-        { "nvim-tree/nvim-tree.lua",         config = true },
-        { "akinsho/bufferline.nvim",         config = true },
-        { "kylechui/nvim-surround",          config = true },
-        { "windwp/nvim-autopairs",           event = "InsertEnter", config = true },
+        { 'folke/which-key.nvim',            event = 'VeryLazy', },
+        { 'lewis6991/gitsigns.nvim' },
+        { 'nvim-tree/nvim-tree.lua',         config = true },
+        { 'akinsho/bufferline.nvim',         config = true },
+        { 'kylechui/nvim-surround',          config = true },
+        { 'windwp/nvim-autopairs',           event = 'InsertEnter', config = true },
+        { 'hedyhli/outline.nvim', },
     },
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "habamax" } },
@@ -45,111 +46,47 @@ require("lazy").setup({
 
 
 
+
+
+
+-- 基础配置
 vim.opt.number = true
--- vim.opt.relativenumber = true
--- vim.api.nvim_create_autocmd("InsertEnter", {
---   callback = function() vim.opt.relativenumber = false end
--- })
--- vim.api.nvim_create_autocmd("InsertLeave", {
---   callback = function() vim.opt.relativenumber = true end
--- })
-
 vim.opt.shell = '/usr/bin/fish'
+vim.opt.tabstop = 4      -- 一个 <Tab> 字符显示为 4 列
+vim.opt.softtabstop = 4  -- 按 Tab 或 Backspace 时，缩进/删除 4 个空格
+vim.opt.shiftwidth = 4   -- 自动缩进（如 >>、<<）时使用 4 个空格
+vim.opt.expandtab = true -- 将 <Tab> 键输入转换为空格（推荐）
+vim.keymap.set('n', '<leader>n', function()
+    vim.opt.relativenumber = not vim.opt.relativenumber:get()
+end, { desc = '切换行号显示' })
+vim.keymap.set('n', '<leader>w', ':wa<CR>', { desc = '全部保存' })
 
--- vim.cmd('colorscheme habamax')
+
+
+-- 主题
 require("catppuccin").setup({ term_colors = true, auto_integrations = true, })
-vim.cmd('colorscheme catppuccin')
--- vim.cmd('colorscheme tokyonight')
+-- vim.cmd('colorscheme catppuccin')
+vim.cmd('colorscheme tokyonight')
 vim.opt.termguicolors = true
 vim.opt.redrawtime = 10000 -- 10秒
 
-vim.opt.tabstop = 4        -- 一个 <Tab> 字符显示为 4 列
-vim.opt.softtabstop = 4    -- 按 Tab 或 Backspace 时，缩进/删除 4 个空格
-vim.opt.shiftwidth = 4     -- 自动缩进（如 >>、<<）时使用 4 个空格
-vim.opt.expandtab = true   -- 将 <Tab> 键输入转换为空格（推荐）
 
 
 
 
--- clipboard
-vim.g.clipboard = {
-    name = 'OSC 52',
-    copy = {
-        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-    },
-    paste = {
-        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-    },
-}
 
+-- 外观布局相关
 vim.keymap.set('n', '<F11>', ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>", {})
-vim.keymap.set('n', '<Space>w', ':w<CR>', {})
-
-
-vim.keymap.set({ 'n', 'x' }, '<leader>?', function()
-    require('which-key').show({ global = false })
-end, { desc = 'which-key' })
-
-
-
-
--- 代码开发相关快捷键
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Goto definition' })
-vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Goto declaration' })
-vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { desc = 'Goto implementation' })
-vim.keymap.set('n', 'gR', vim.lsp.buf.references, { desc = 'References' })
-vim.keymap.set('n', '<Space>r', vim.lsp.buf.rename, { desc = 'Rename' })
-vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code action' })
-
-
-
-vim.keymap.set('n', '<Space>c', function()
-    return require('vim._comment').operator() .. '_'
-end, { expr = true, desc = 'Toggle comment line' })
--- vim.keymap.set({ 'n', 'x' }, '<Space>c', function()
---     return require('vim._comment').operator()
--- end, { expr = true, desc = 'Toggle comment' })
-
-
-
-require 'nvim-treesitter.configs'.setup {
-    -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-    ensure_installed = { "c", "cpp", "lua", "python", "go", "rust", "bash" },
-
-    -- Install parsers synchronously (only applied to `ensure_installed`)
-    sync_install = false,
-
-    -- Automatically install missing parsers when entering buffer
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
-
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "gnn", -- set to `false` to disable one of the mappings
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-        },
-    },
-    indent = {
-        enable = true
+vim.keymap.set('n', '<leader>o', ':Outline<CR>', { desc = 'Toggle Outline' })
+require("outline").setup {
+    outline_window = {
+        width = 40,
+        relative_width = false,
     }
 }
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.opt.foldlevel = 99
 
 
 
-
--- NvimTree
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -207,15 +144,69 @@ vim.keymap.set('n', '<leader>c', ':close<CR>', { desc = "Close window" })
 
 
 
+
+
+-- 代码开发相关快捷键
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Goto definition' })
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Goto declaration' })
+vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { desc = 'Goto implementation' })
+vim.keymap.set('n', 'gR', vim.lsp.buf.references, { desc = 'References' })
+vim.keymap.set('n', '<Space>r', vim.lsp.buf.rename, { desc = 'Rename' })
+vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code action' })
+
+
+vim.keymap.set('n', '<Space>c', function()
+    return require('vim._comment').operator() .. '_'
+end, { expr = true, desc = 'Toggle comment line' })
+-- vim.keymap.set({ 'n', 'x' }, '<Space>c', function()
+--     return require('vim._comment').operator()
+-- end, { expr = true, desc = 'Toggle comment' })
+
+
+
+require 'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+    ensure_installed = { "c", "cpp", "lua", "python", "go", "rust", "bash" },
+
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = false,
+
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = "gnn", -- set to `false` to disable one of the mappings
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+        },
+    },
+    indent = {
+        enable = true
+    }
+}
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldlevel = 99
+
+
+
 vim.diagnostic.config({
     virtual_text = false,
     underline = false,
     severity_sort = true,
 })
-vim.keymap.set('n', '<leader>df', function()
+vim.keymap.set('n', '<leader>d', function()
     vim.diagnostic.open_float()
 end, { desc = "弹窗显示诊断" })
-vim.keymap.set('n', '<leader>dv', function()
+vim.keymap.set('n', '<Space>d', function()
     if vim.diagnostic.config().virtual_text then
         vim.diagnostic.config({
             virtual_text = false,
@@ -245,7 +236,12 @@ vim.keymap.set("n", "<Space>f", function()
     })
 end, { noremap = true, silent = true, desc = "LSP Format" })
 
--- Set up nvim-cmp.
+
+
+
+
+
+-- 代码补全
 local cmp = require 'cmp'
 
 cmp.setup({
@@ -322,6 +318,29 @@ cmp.setup.cmdline(':', {
 })
 
 
+
+
+
+
+-- 剪切板
+vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+}
+
+
+
+
+
+
+-- LSP
 vim.lsp.enable('clangd')
 vim.lsp.enable('pyright')
 vim.lsp.enable('ruff')
@@ -329,3 +348,4 @@ vim.lsp.enable('bashls')
 vim.lsp.enable('gopls')
 vim.lsp.enable('rust_analyzer')
 vim.lsp.enable('lua_ls')
+vim.lsp.enable('ts_ls')
