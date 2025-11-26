@@ -1,0 +1,16 @@
+theme = "catppuccin_mocha"
+# theme = "tokyonight"
+
+[editor]
+true-color = true
+end-of-line-diagnostics = "disable"
+
+[editor.inline-diagnostics]
+# cursor-line = "disable" # show warnings and errors on the cursorline inline
+
+
+[editor.word-completion]
+enable = true
+trigger-length = 3
+
+[editor.cursor-sha
